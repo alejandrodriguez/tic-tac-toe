@@ -9,6 +9,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: sans-serif;
 }
 
 .wrapper {
@@ -30,4 +31,34 @@ body {
 
 .space {
     border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 120px;
+}
+
+.modal {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+}
+
+.modal-content {
+    background-color: white;
+    text-align: center;
+    margin: 40vh auto;
+    padding: 20px 50px;
+    width: 100px;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.modal button {
+    margin-top: 10px;
+    padding: 5px;
 }

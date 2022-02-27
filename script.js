@@ -5,7 +5,7 @@ const gameBoard = (function() {
 
     function changeGameBoardState(e) {
         let space = e.target.getAttribute('data-space');
-        if(gameBoardState[space] === undefined) {
+        if(!gameBoardState[space]) {
             switch(displayController.whosTurn) {
                 case 'X':
                     gameBoardState[space] = 'X';
@@ -31,6 +31,9 @@ const gameBoard = (function() {
 const displayController = (function() {
 
     const spaces = Array.from(document.querySelectorAll('.space'));
+    const restartBtn = document.querySelector('.restartbtn');
+    const modal = document.querySelector('.modal');
+    const modalContent = document.querySelector('.modal-content');
     let whosTurn = 'X' //Change to allow Player Selection
 
     function changeTurn() {
@@ -57,6 +60,13 @@ const displayController = (function() {
             [2, 4, 6]
         ]
         
+    function declareWinner(winner) {
+
+        modalContent.firstChild.textContent = `${winner} wins!`
+        modal.style.display = 'block';
+
+    }
+    
         let winnerIsX = winningCombos.some(combo => {
             return combo.every(space => {
                 return gameBoard.gameBoardState[space] === 'X'
@@ -70,7 +80,18 @@ const displayController = (function() {
         })
 
         if (winnerIsX || winnerIsO) {
-            //Declare winner!
+            let winner = winnerIsX ? 'X' : 'O';
+            declareWinner(winner);
+        }
+
+    }
+
+    function restartGame () {
+        modal.style.display = 'none';
+        modalContent.firstChild.textContent = '';
+        gameBoard.gameBoardState = [];
+        for (let i = 0; i < spaces.length; i++) {
+            spaces[i].textContent = '';
         }
     }
 
@@ -79,8 +100,13 @@ const displayController = (function() {
         spaces[i].addEventListener('click', checkForWinner);
     }
 
+    restartBtn.addEventListener('click', restartGame)
+
     return {
         whosTurn
     }
 
 })()
+
+/* Current bug likely stems from local variables in factory functions != obj properties declared from those variables.
+    Research factory function syntax to see how to set object properties that also change local variables of the same name. */
