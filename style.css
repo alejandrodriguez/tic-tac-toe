@@ -14,10 +14,15 @@ body {
 
 .wrapper {
     display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
     justify-content: center;
     align-items: center;
+}
+
+.wrapper > button{
+    margin: -10px 10px 10px;
 }
 
 .gameboard {
@@ -49,16 +54,40 @@ body {
     display: none;
 }
 
-.modal-content {
+.modalcontent {
     background-color: white;
     text-align: center;
     margin: 40vh auto;
     padding: 20px 50px;
-    width: 100px;
+    width: fit-content;
     box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 .modal button {
     margin-top: 10px;
-    padding: 5px;
+}
+
+button {
+    padding: 5px 10px;
+}
+
+#playersmodal {
+    display: block;
+}
+
+#playersmodalcontent {
+    margin: 35vh auto;
+}
+
+form > h3 {
+    margin: 20px 0 10px;
+}
+
+form > input {
+    margin-bottom: 20px;
+}
+
+form > button {
+    display: block;
+    margin: 0 auto;
 }

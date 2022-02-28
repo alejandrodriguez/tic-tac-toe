@@ -41,11 +41,13 @@ const gameBoard = (function() {
 
 const displayController = (function() {
 
+    const startBtn = document.querySelector('.startbtn');
+    const playersModal = document.querySelector('#playersmodal')
     const spaces = Array.from(document.querySelectorAll('.space'));
-    const restartBtn = document.querySelector('.restartbtn');
-    const modal = document.querySelector('.modal');
-    const modalContent = document.querySelector('.modal-content');
-    let whosTurn = 'X' //Change to allow Player Selection
+    const restartBtns = document.querySelectorAll('.restartbtn');
+    const winnerModal = document.querySelector('#winnermodal');
+    const winnerModalContent = document.querySelector('#winnermodalcontent');
+    let whosTurn = 'X'
 
     function changeTurn() {
         switch(whosTurn) {
@@ -75,11 +77,11 @@ const displayController = (function() {
         
     function declareWinner(winner) {
         if(winner === 'tie') {
-            modalContent.firstChild.textContent = 'It\'s a tie!'
-            modal.style.display = 'block';
+            winnerModalContent.firstChild.textContent = 'It\'s a tie!'
+            winnerModal.style.display = 'block';
         } else {
-            modalContent.firstChild.textContent = `${winner} wins!`
-            modal.style.display = 'block';
+            winnerModalContent.firstChild.textContent = `${winner} wins!`
+            winnerModal.style.display = 'block';
             winnerIsX = false;
             winnerIsO = false;
         }
@@ -107,10 +109,15 @@ const displayController = (function() {
         }
     }
 
+    function startGame() {
+        playersModal.style.display = 'none';
+    }
+
     function restartGame() {
-        modal.style.display = 'none';
-        modalContent.firstChild.textContent = '';
+        winnerModal.style.display = 'none';
+        winnerModalContent.firstChild.textContent = '';
         gameBoard.resetGameBoard();
+        whosTurn = 'X';
     }
 
     for (let i = 0; i < spaces.length; i++) {
@@ -118,7 +125,11 @@ const displayController = (function() {
         spaces[i].addEventListener('click', checkForWinner);
     }
 
-    restartBtn.addEventListener('click', restartGame)
+    for (let i = 0; i < restartBtns.length; i++) {
+        restartBtns[i].addEventListener('click', restartGame)
+    }
+
+    startBtn.addEventListener('click', startGame)
 
     return {
         readWhosTurn

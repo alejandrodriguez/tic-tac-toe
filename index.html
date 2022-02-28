@@ -9,10 +9,24 @@
     <script src="script.js" defer></script>
 </head>
 <body>
-    <div class="modal">
-        <div class="modal-content"><div></div><button class="restartbtn">Play Again</button></div>
+    <div class="modal" id="winnermodal">
+        <div class="modalcontent" id="winnermodalcontent"><div></div><button class="restartbtn">Play Again</button></div>
+    </div>
+    <div class="modal" id="playersmodal">
+        <div class="modalcontent" id="playersmodalcontent">
+            <form>
+                <h3>Player 1: The Hero of the X's</h3>
+                <label for="name1">Your Name:</label>
+                <input type="text" id="name1">
+                <h3>Player 2: The Legend of the O's</h3>
+                <label for="name2">Your Name:</label>
+                <input type="text" id="name2">
+                <button type="button" class="startbtn">Begin</button>
+            </form>
+        </div>
     </div>
     <div class="wrapper">
+        <button class="restartbtn">Restart</button>
         <div class="gameboard">
             <div class="space" data-space="0"></div>
             <div class="space" data-space="1"></div>
