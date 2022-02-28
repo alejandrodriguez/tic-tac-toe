@@ -1,12 +1,13 @@
 const gameBoard = (function() {
 
     const spaces = Array.from(document.querySelectorAll('.space'));
-    let gameBoardState = []
+    let gameBoardState = [];
 
     function changeGameBoardState(e) {
+
         let space = e.target.getAttribute('data-space');
         if(!gameBoardState[space]) {
-            switch(displayController.whosTurn) {
+            switch(displayController.readWhosTurn()) {
                 case 'X':
                     gameBoardState[space] = 'X';
                     break;
@@ -22,8 +23,18 @@ const gameBoard = (function() {
         spaces[i].addEventListener('click', changeGameBoardState);
     }
 
+    const readGameBoardState = () => gameBoardState;
+
+    function resetGameBoard() {
+        gameBoardState = [];
+        for (let i = 0; i < spaces.length; i++) {
+            spaces[i].textContent = '';
+        }
+    }
+
     return {
-        gameBoardState
+        readGameBoardState,
+        resetGameBoard
     }
 
 })()
@@ -37,15 +48,17 @@ const displayController = (function() {
     let whosTurn = 'X' //Change to allow Player Selection
 
     function changeTurn() {
-        switch(displayController.whosTurn) {
+        switch(whosTurn) {
             case 'X':
-                displayController.whosTurn = 'O';
+                whosTurn = 'O';
                 break;
             case 'O':
-                displayController.whosTurn = 'X';
+                whosTurn = 'X';
                 break;
         }
     }
+
+    let readWhosTurn = () => whosTurn;
 
     function checkForWinner() {
 
@@ -69,13 +82,13 @@ const displayController = (function() {
     
         let winnerIsX = winningCombos.some(combo => {
             return combo.every(space => {
-                return gameBoard.gameBoardState[space] === 'X'
+                return gameBoard.readGameBoardState()[space] === 'X'
             })
         })
 
         let winnerIsO = winningCombos.some(combo => {
             return combo.every(space => {
-                return gameBoard.gameBoardState[space] === 'O'
+                return gameBoard.readGameBoardState()[space] === 'O'
             })
         })
 
@@ -86,13 +99,10 @@ const displayController = (function() {
 
     }
 
-    function restartGame () {
+    function restartGame() {
         modal.style.display = 'none';
         modalContent.firstChild.textContent = '';
-        gameBoard.gameBoardState = [];
-        for (let i = 0; i < spaces.length; i++) {
-            spaces[i].textContent = '';
-        }
+        gameBoard.resetGameBoard();
     }
 
     for (let i = 0; i < spaces.length; i++) {
@@ -103,10 +113,7 @@ const displayController = (function() {
     restartBtn.addEventListener('click', restartGame)
 
     return {
-        whosTurn
+        readWhosTurn
     }
 
 })()
-
-/* Current bug likely stems from local variables in factory functions != obj properties declared from those variables.
-    Research factory function syntax to see how to set object properties that also change local variables of the same name. */
