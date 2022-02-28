@@ -4,7 +4,6 @@ const gameBoard = (function() {
     let gameBoardState = [null, null, null, null, null, null, null, null, null];
 
     function changeGameBoardState(e) {
-
         let space = e.target.getAttribute('data-space');
         if(!gameBoardState[space]) {
             switch(displayController.readWhosTurn()) {
@@ -43,8 +42,10 @@ const displayController = (function() {
 
     const startBtn = document.querySelector('.startbtn');
     const playersModal = document.querySelector('#playersmodal')
+    const nameInputs = document.querySelectorAll('input');
     const spaces = Array.from(document.querySelectorAll('.space'));
-    const restartBtns = document.querySelectorAll('.restartbtn');
+    const restartBtn = document.querySelector('.restartbtn');
+    const resetBtn = document.querySelector('.resetbtn');
     const winnerModal = document.querySelector('#winnermodal');
     const winnerModalContent = document.querySelector('#winnermodalcontent');
     let whosTurn = 'X'
@@ -78,13 +79,14 @@ const displayController = (function() {
     function declareWinner(winner) {
         if(winner === 'tie') {
             winnerModalContent.firstChild.textContent = 'It\'s a tie!'
-            winnerModal.style.display = 'block';
-        } else {
-            winnerModalContent.firstChild.textContent = `${winner} wins!`
-            winnerModal.style.display = 'block';
-            winnerIsX = false;
-            winnerIsO = false;
+        } else if(winnerIsX) {
+            winnerModalContent.firstChild.textContent = `${player1.readName()} wins!`
+        } else if(winnerIsO) {
+            winnerModalContent.firstChild.textContent = `${player2.readName()} wins!`
         }
+        winnerModal.style.display = 'block';
+        winnerIsX = false;
+        winnerIsO = false;
     }
     
         let winnerIsX = winningCombos.some(combo => {
@@ -120,19 +122,48 @@ const displayController = (function() {
         whosTurn = 'X';
     }
 
+    function resetGame() {
+        gameBoard.resetGameBoard();
+        whosTurn = 'X';
+        for (let i = 0; i < nameInputs.length; i++) {
+            nameInputs[i].value = '';
+        }
+        playersModal.style.display = 'block';
+    }
+
     for (let i = 0; i < spaces.length; i++) {
         spaces[i].addEventListener('click', changeTurn);
         spaces[i].addEventListener('click', checkForWinner);
     }
 
-    for (let i = 0; i < restartBtns.length; i++) {
-        restartBtns[i].addEventListener('click', restartGame)
-    }
+    restartBtn.addEventListener('click', restartGame);
 
-    startBtn.addEventListener('click', startGame)
+    resetBtn.addEventListener('click', resetGame);
+
+    startBtn.addEventListener('click', startGame);
 
     return {
         readWhosTurn
     }
 
 })()
+
+const createPlayer = function (name, playerNumber) {
+    const nameInput = document.querySelector(`#name${playerNumber}`)
+    const startBtn = document.querySelector('.startbtn');
+    const changeName = () => {
+        if(nameInput.value) {
+            name = nameInput.value;
+        }
+    }
+    startBtn.addEventListener('click', changeName);
+    const readName = () => name;
+    return {
+        readName,
+        changeName
+    }
+}
+
+const player1 = createPlayer('X', 1)
+
+const player2 = createPlayer('O', 2);
