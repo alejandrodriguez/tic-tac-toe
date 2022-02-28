@@ -1,7 +1,7 @@
 const gameBoard = (function() {
 
     const spaces = Array.from(document.querySelectorAll('.space'));
-    let gameBoardState = [];
+    let gameBoardState = [null, null, null, null, null, null, null, null, null];
 
     function changeGameBoardState(e) {
 
@@ -26,7 +26,7 @@ const gameBoard = (function() {
     const readGameBoardState = () => gameBoardState;
 
     function resetGameBoard() {
-        gameBoardState = [];
+        gameBoardState = [null, null, null, null, null, null, null, null, null];
         for (let i = 0; i < spaces.length; i++) {
             spaces[i].textContent = '';
         }
@@ -74,10 +74,15 @@ const displayController = (function() {
         ]
         
     function declareWinner(winner) {
-
-        modalContent.firstChild.textContent = `${winner} wins!`
-        modal.style.display = 'block';
-
+        if(winner === 'tie') {
+            modalContent.firstChild.textContent = 'It\'s a tie!'
+            modal.style.display = 'block';
+        } else {
+            modalContent.firstChild.textContent = `${winner} wins!`
+            modal.style.display = 'block';
+            winnerIsX = false;
+            winnerIsO = false;
+        }
     }
     
         let winnerIsX = winningCombos.some(combo => {
@@ -97,6 +102,9 @@ const displayController = (function() {
             declareWinner(winner);
         }
 
+        if (gameBoard.readGameBoardState().every((index) => typeof index === 'string')){
+            declareWinner('tie');
+        }
     }
 
     function restartGame() {
